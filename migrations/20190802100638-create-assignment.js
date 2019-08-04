@@ -18,7 +18,7 @@ module.exports = {
       problemText: {
         type: Sequelize.TEXT
       },
-      userId: {
+      creatorId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -35,8 +35,8 @@ module.exports = {
         type: Sequelize.DATE
       }
     }).then(() => {
-      queryInterface.addIndex('Assignments', ['userId']);
-      queryInterface.addConstraint('Assignments', ['userId', 'title'], { type: 'unique', name: 'userid_title'}); 
+      queryInterface.addIndex('Assignments', ['creatorId']);
+      queryInterface.addConstraint('Assignments', ['creatorId', 'title'], { type: 'unique', name: 'userid_title'});
     });
   },
   down: (queryInterface, Sequelize) => {

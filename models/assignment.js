@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     maxMark: DataTypes.INTEGER,
     problemText: DataTypes.TEXT,
-    userId: DataTypes.INTEGER
+    creatorId: DataTypes.INTEGER
   }, {
     hooks: {
       beforeSave: (assignment) => {
@@ -13,14 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   Assignment.associate = function(models) {
-    // associations can be defined here
-    Assignment.belongsTo(models.User, { foreignKey: 'userId', as: 'user'});
-    Assignment.hasMany(models.UserAssignment, {as: 'UserAssignments'});
-    Assignment.belongsToMany(models.user, {
+    Assignment.belongsTo(models.User, {as: 'creator', foreignKey: 'creatorId'});
+    Assignment.belongsToMany(models.User, {
       through: 'UserAssignments',
-      foreignKey: 'assignmentId',
-      as: 'students'
-    }); // accessible assigments as a student
+      foreignKey: 'assignmentId'
+    });
     Assignment.hasMany(models.Submission, { as: 'submissions'});
   };
   return Assignment;

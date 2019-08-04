@@ -1,5 +1,6 @@
 'use strict';
-const hashPassword = require('../lib/hash-password');
+const { hashPassword } = require('../lib/bcrypt-client');
+const jwt = require('jsonwebtoken');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: {
@@ -11,10 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      validate: {
-         is: /^[a-zA-Z]+$/ // does not allow letters
-       }
+      // validate: {
+      //    is: /^[a-zA-Z]+$/ // does not allow letters
+      //  }
      },
+    creatorId: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN, // keep track of deleted students
     password: DataTypes.STRING,
     userType: {
@@ -33,15 +35,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   User.associate = function(models) {
-    // associations can be defined here
-    User.hasMany(models.Assignment, {as: 'assignments'}); // retrive assignment created by user
-    User.hasMany(models.UserAssignment, {as: 'UserAssignments'});
+    User.hasMany(models.Assignment, {as: 'assesments', foreignKey: 'creatorId'})
     User.belongsToMany(models.Assignment, {
       through: 'UserAssignments',
-      foreignKey: 'userId',
-      as: 'assesments'
-    }); // accessible assigments as a student
+      foreignKey: 'userId'
+    });
     User.hasMany(models.Submission, {as: 'submissions'});
+    User.hasOne(models.LeaderBoard, {as: 'leaderboard'});
   };
+
+  User.prototype.generateAuthToken = function(){
+    return jwt.sign({id: this.id, email: this.email, name: this.name, userType: this.userType}, 'privatekey')
+  }
   return User;
 };

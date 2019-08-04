@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Submission.belongsTo(models.User, {foreignKey: 'userId', as: 'user'});
     Submission.belongsTo(models.Assignment, {foreignKey: 'assignmentId', as: 'assignment'});
-    Submission.belongsTo(Model.UserAssignment, {foreignKey: 'userAssignmentId', as: 'user_assignment'});
+    Submission.belongsTo(models.UserAssignment, {foreignKey: 'userAssignmentId', as: 'user_assignment'});
   };
   return Submission;
 };

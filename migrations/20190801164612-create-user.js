@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.ENUM("I", "L"),
         allowNull: false
       },
+      creatorId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
       active: {
         type: Sequelize.BOOLEAN
       },
