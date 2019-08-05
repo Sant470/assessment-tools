@@ -7,6 +7,7 @@ const models = require('../models');
 const Assignment = models.Assignment;
 const router = express.Router();
 
+
 // create an assesment i.e create
 router.post('/', [auth, instructor] , async(req, res) => {
   if(!req.body.title || !req.body.problemText){
@@ -29,7 +30,7 @@ router.get('/:id', auth, async(req, res) => {
 
 
 // update an assesment  i.e put
-router.put('/:id', [auth, instructor, creator], async(req, res) => {
+router.put('/:id', [auth, creator], async(req, res) => {
   if(!req.body){
     return res.status(400).send({error: 'Invalid params'});
   }
@@ -38,7 +39,7 @@ router.put('/:id', [auth, instructor, creator], async(req, res) => {
 });
 
 // delete an assesment
-router.delete('/:id',[auth, instructor, creator], async(req, res) =>{
+router.delete('/:id',[auth,creator], async(req, res) =>{
   await req.assignment.destroy();
   res.send({assignment: req.assignment})
 });

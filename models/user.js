@@ -35,10 +35,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   User.associate = function(models) {
-    User.hasMany(models.Assignment, {as: 'assesments', foreignKey: 'creatorId'})
+    User.hasMany(models.Assignment, {as: 'assignments', foreignKey: 'creatorId'})
     User.belongsToMany(models.Assignment, {
       through: 'UserAssignments',
-      foreignKey: 'userId'
+      foreignKey: 'userId',
+      as: 'assesments'
     });
     User.hasMany(models.Submission, {as: 'submissions'});
     User.hasOne(models.LeaderBoard, {as: 'leaderboard'});
