@@ -11,16 +11,14 @@ router.post('/', [auth, instructor] , async(req, res) => {
   if(!req.body.email || !req.body.password){
     return res.status(400).send({error: 'Invalid params'});
   }
-  const student = await User.findOrCreate({
-    where: {email: req.body.email},
-    defaults: {
-      name: req.body.name || req.body.email.split("@")[0],
-      password: req.body.password,
-      userType: "L",
-      active: true,
-      creatorId: req.user.id,
-    }});
-  res.status(201).send({student: student[0]});
+  const student = await req.user.createStudent({
+    email: req.body.email,
+    name: req.body.name || req.body.email.split("@")[0],
+    password: req.body.password,
+    userType: "L",
+    active: true
+  });
+  res.status(201).send({student: student});
 });
 
 // show an student i.e show
@@ -32,9 +30,6 @@ router.get('/:id', auth, async(req, res) => {
 
 // update an student  i.e put
 router.put('/:id', [auth, creator], async(req, res) => {
-  if(!req.body){
-    return res.status(400).send({error: 'Invalid params'});
-  }
   const student = await req.student.update(req.body);
   res.send({student: student});
 });

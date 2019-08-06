@@ -8,13 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userAssignmentId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'UserAssignments',
-          key: 'id'
-        }
-      },
       assignmentId: {
         type: Sequelize.INTEGER,
         references: {
@@ -49,7 +42,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    }).then(()=> queryInterface.addIndex('Submissions', ['userAssignmentId', 'userId', 'assignmentId'], {unique: true}));
+    }).then(()=> queryInterface.addIndex('Submissions', ['userId', 'assignmentId'], {unique: true}));
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Submissions');

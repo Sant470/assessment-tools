@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       //    is: /^[a-zA-Z]+$/ // does not allow letters
       //  }
      },
-    creatorId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN, // keep track of deleted students
     password: DataTypes.STRING,
     userType: {
@@ -35,18 +35,24 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   User.associate = function(models) {
+    // self join
+    User.belongsTo(models.User, {as: 'instructor', foreignKey: 'userId'});
+    User.hasMany(models.User, {as: 'students', foreignKey: 'userId'});
+    // assignments
     User.hasMany(models.Assignment, {as: 'assignments', foreignKey: 'creatorId'})
     User.belongsToMany(models.Assignment, {
+      as: 'assessments',
       through: 'UserAssignments',
-      foreignKey: 'userId',
-      as: 'assesments'
-    });
-    User.hasMany(models.Submission, {as: 'submissions'});
-    User.hasOne(models.LeaderBoard, {as: 'leaderboard'});
+      foreignKey: 'userId'
+    }); // accessibles as a student
+
+    // submissions
+    User.hasMany(models.Submission, {as: 'submissions', foreignKey: 'userId'});
+    User.hasOne(models.LeaderBoard, {as: 'leaderboard', foreignKey: 'userId'});
   };
 
   User.prototype.generateAuthToken = function(){
     return jwt.sign({id: this.id, email: this.email, name: this.name, userType: this.userType}, 'privatekey')
-  }
+  };
   return User;
 };

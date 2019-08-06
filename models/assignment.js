@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       through: 'UserAssignments',
       foreignKey: 'assignmentId'
     });
-    Assignment.hasMany(models.Submission, { as: 'submissions'});
+    Assignment.hasMany(models.Submission, { as: 'submissions', foreignKey: 'assignmentId'});
   };
   return Assignment;
 };

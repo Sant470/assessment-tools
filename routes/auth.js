@@ -12,6 +12,7 @@ router.post('/', async(req,res) => {
   }
   const user =  await User.findOne({where: {email: req.body.email}});
   if(!user) return res.status(401).send({error: 'Invalid email or password'});
+  if((!user.active) &&(user.userType === "L")) return res.status(403).send({error: 'Account deleted'});
 
   const validPassword = await comparePassword(req.body.password, user.password);
   if(!validPassword) return res.status(401).send({error: 'Invalid email or password'});

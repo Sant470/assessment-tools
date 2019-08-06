@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.ENUM("I", "L"),
         allowNull: false
       },
-      creatorId: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: true
       },
