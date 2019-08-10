@@ -1,8 +1,6 @@
 const auth = require('../middleware/authorization');
 const express = require('express');
 const models = require('../models');
-const db = require('../models/index');
-const LeaderBoard = models.LeaderBoard;
 const User = models.User;
 const router = express.Router();
 
@@ -13,7 +11,7 @@ router.get('/', auth , async(req, res) => {
     if(!await req.user.getLeaderboard()){
       return res.status(400).send({error: 'leaderboard not available'});
     }
-    const leaderboard = await db.sequelize.query(
+    const leaderboard = await models.sequelize.query(
       `SELECT "userId","spellingScore","grammerScore","relevanceScore", "total", rank FROM
       ( SELECT "userId","spellingScore","grammerScore","relevanceScore", "total",rank() OVER (ORDER BY "total" DESC)as rank from "LeaderBoards")t
       where "userId"=${req.user.id}`
