@@ -45,7 +45,7 @@ router.post('/:assignmentId/submit', [auth, student], async(req,res) =>{
 
   // call apis to get spellingScore, relevanceScore, grammerScore and create submission
   const spellingScore = await spelling_score(answerText);
-  const relevanceScore = await relevance_score(answerText, [assignment.title]); // need to have additional column in assignment called tags
+  const relevanceScore = await relevance_score(answerText, [assignment.title]); // need to have a column in assignment or a table for tags
   const grammerScore = await grammer_score(answerText);
   const total = spellingScore + grammerScore + relevanceScore;
   const submission = await req.user.createSubmission({

@@ -6,7 +6,7 @@ const models = require('../models');
 const User = models.User;
 const router = express.Router();
 
-// create an student i.e create
+// create a student i.e create
 router.post('/', [auth, instructor] , async(req, res) => {
   if(!req.body.email || !req.body.password){
     return res.status(400).send({error: 'Invalid params'});
@@ -21,20 +21,20 @@ router.post('/', [auth, instructor] , async(req, res) => {
   res.status(201).send({student: student});
 });
 
-// show an student i.e show
+// show a student i.e show
 router.get('/:id', auth, async(req, res) => {
   const student = await User.findOne({where: {id: req.params.id}});
   res.send({student: student});
 });
 
 
-// update an student  i.e put
+// update a student  i.e put
 router.put('/:id', [auth, creator], async(req, res) => {
   const student = await req.student.update(req.body);
   res.send({student: student});
 });
 
-// delete an student
+// delete a student
 router.delete('/:id',[auth, creator], async(req, res) =>{
   const student = await req.student.update({active: false});
   res.send({student: student});
